@@ -1,0 +1,160 @@
+/* ── components.css ── */
+
+/* ─── HEADER ─────────────────────────────── */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    height: var(--header-height);
+    background: var(--color-white);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.header-inner {
+    max-width: var(--max-width);
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 var(--side-padding);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Logo */
+.logo {
+    font-family: var(--font-display);
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--color-black);
+    transition: opacity var(--ease);
+}
+
+.logo:hover {
+    opacity: 0.7;
+}
+
+/* Icon nav */
+.icon-nav {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.icon-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-black);
+    opacity: 0.85;
+    transition: opacity var(--ease);
+}
+
+.icon-link:hover {
+    opacity: 1;
+}
+
+/* Logo image */
+.logo-img {
+    height: 62px;
+    width: auto;
+    display: block;
+}
+
+/* Icon PNG images */
+.icon-link img {
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+    display: block;
+}
+
+/* ─── BUTTONS ─────────────────────────────── */
+.btn-primary {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    color: var(--color-white);
+    background: var(--color-navy);
+    padding: 18px 44px;
+    border: 2px solid var(--color-navy);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+}
+
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(46, 63, 93, 0.35);
+}
+
+/* ─── PLACEHOLDER BLOCKS ──────────────────── */
+
+
+/* ─── FOOTER ──────────────────────────────── */
+.site-footer {
+    background: var(--color-white);
+    border-top: 1px solid var(--color-border);
+    padding: 60px var(--side-padding) 48px;
+}
+
+.footer-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;   /* ← left half | right half */
+    gap: 40px;
+    align-items: start;
+}
+
+.footer-brand {
+    grid-column: 1;                   /* ← logo stays on left half */
+}
+
+/* Right half — holds all 3 columns in a row */
+.footer-cols {
+    grid-column: 2;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    text-align: center;
+}
+.footer-heading {
+    font-family: var(--font-body);
+    font-size: 13px;          /* ← was 11px */
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    color: var(--color-black);
+    margin-bottom: 24px;
+}
+
+.footer-links a {
+    font-family: var(--font-body);
+    font-size: 16px;          /* ← was 14px */
+    font-weight: 300;
+    color: var(--color-text-muted);
+    transition: color var(--ease);
+}
+
+
+/* ─── RESPONSIVE: FOOTER ─────────────────── */
+@media (max-width: 768px) {
+    .footer-inner {
+        grid-template-columns: 1fr 1fr;
+        gap: 36px 24px;
+    }
+
+    .footer-brand {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-inner {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,18 @@
+/* ── variables.css ── */
+:root {
+    --color-white:       #ffffff;
+    --color-black:       #0a0a0a;
+    --color-navy:        #2E3F5D;
+    --color-placeholder: #C8C8C8;
+    --color-border:      rgba(0, 0, 0, 0.08);
+    --color-text-muted:  #6b6b6b;
+
+    --font-display: 'Libre Bodoni', Georgia, serif;
+    --font-body:    'Hiragino Kaku Gothic Pro', 'Hiragino Sans', sans-serif;
+
+    --header-height: 80px;
+    --max-width:     1440px;
+    --side-padding:  clamp(1.5rem, 4vw, 3rem);
+
+    --ease: 0.2s ease;
+}

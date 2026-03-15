@@ -1,0 +1,23 @@
+.header-inner {
+    height: 150px;   /* fixed height — change to match your Figma */
+}
+
+.logo img {
+    height: 60px;
+    width: auto;  /* keeps aspect ratio */
+}
+nav a img {
+    width: 25px;
+    height: 25px;
+    display: block;
+}
+.logo img {
+    height: 36px;
+    width: auto;
+}
+
+.icon-btn img {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
