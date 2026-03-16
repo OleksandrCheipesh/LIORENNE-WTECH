@@ -1,0 +1,83 @@
+/* ── search.css ── */
+
+/* ─── SEARCH BAR ──────────────────────────── */
+.search-bar {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    width: 100%;
+    background: var(--color-white);
+    border-bottom: 0px solid var(--color-border);
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.35s ease, box-shadow 0.35s ease;
+    z-index: 99;
+}
+
+.search-bar.open {
+    max-height: 80px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.search-bar-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--side-padding);
+    height: 80px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.search-bar input {
+    flex: 1;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    color: var(--color-black);
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 0;
+}
+
+.search-bar input::placeholder {
+    color: var(--color-text-muted);
+    font-weight: 300;
+}
+
+.search-bar-divider {
+    width: 1px;
+    height: 20px;
+    background: var(--color-border);
+    flex-shrink: 0;
+}
+
+.search-close {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    transition: color var(--ease);
+}
+
+.search-close:hover {
+    color: var(--color-black);
+}
+
+/* Active state on the search icon */
+.icon-link.search-active {
+    opacity: 1;
+}
+
+.icon-link.search-active img {
+    filter: brightness(0);   /* makes icon fully black when active */
+}

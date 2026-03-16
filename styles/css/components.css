@@ -105,21 +105,22 @@
 .footer-inner {
     max-width: var(--max-width);
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;   /* ← left half | right half */
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
     gap: 40px;
-    align-items: start;
+    align-items: center;
 }
 
 .footer-brand {
-    grid-column: 1;                   /* ← logo stays on left half */
+    grid-column: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-
-/* Right half — holds all 3 columns in a row */
 .footer-cols {
     grid-column: 2;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
     gap: 40px;
     text-align: center;
 }

@@ -12,87 +12,23 @@
     <link rel="stylesheet" href="/styles/css/base.css" />
     <link rel="stylesheet" href="/styles/css/components.css" />
     <link rel="stylesheet" href="/styles/css/layout.css" />
-    <style>
-        body { font-family: 'Libre Bodoni', serif; }
-        .checkout-container { max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; }
-        .checkout-summary {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-            color: white;
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 20px 40px rgba(59,130,246, 0.3);
-            position: sticky;
-            top: 2rem;
-        }
-        .payment-option {
-            background: rgba(255,255,255,0.15);
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 12px;
-            padding: 1.25rem;
-            margin-bottom: 0.75rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            justify-content: center;
-        }
-        .payment-option:hover, .payment-option.active {
-            background: rgba(255,255,255,0.25);
-            border-color: white;
-            transform: translateY(-2px);
-        }
-        .form-control {
-            border-radius: 12px;
-            border: 2px solid #e9ecef;
-            padding: 1rem 1.25rem;
-            font-size: 1.1rem;
-        }
-        .form-control:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 0.2rem rgba(59,130,246,0.25);
-        }
-        .required::after {
-            content: " *";
-            color: #dc3545;
-        }
+    <link rel="stylesheet" href="/styles/css/checkout.css" />
+    <link rel="stylesheet" href="/styles/css/search.css" />
+    <link rel="stylesheet" href="/styles/css/wishlist.css" />
 
-        .summary-row {
-            background: rgba(255,255,255,0.15);
-            border-radius: 12px;
-            padding: 0.75rem;
-            margin-bottom: 0.75rem;
-            backdrop-filter: blur(10px);
-        }
-
-        .order-btn {
-            background: rgba(255,255,255,0.15) !important;
-            border: 2px solid rgba(255,255,255,0.3) !important;
-            color: white !important;
-            border-radius: 12px !important;
-            padding: 1rem !important;
-            backdrop-filter: blur(10px) !important;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.5) !important;
-        }
-
-        .order-btn:hover {
-            background: rgba(255,255,255,0.25) !important;
-            transform: translateY(-2px) !important;
-        }
-
-    </style>
 </head>
 <body>
 
-<!-- Header -->
 <header class="site-header">
     <div class="header-inner">
         <a class="logo" href="index.html">
             <img src="/assets/logo.png" alt="Liorenne" class="logo-img" />
         </a>
         <nav class="icon-nav">
-            <a href="/search" class="icon-link" aria-label="Search">
+            <a href="#" class="icon-link" aria-label="Search" id="searchBtn">
                 <img src="/assets/icons/search_logo.png" alt="Search" />
             </a>
-            <a href="/wishlist" class="icon-link" aria-label="Wishlist">
+            <a href="wishlist.html" class="icon-link" aria-label="Wishlist">
                 <img src="/assets/icons/heart_logo.png" alt="Wishlist" />
             </a>
             <a href="cart.html" class="icon-link" aria-label="Cart">
@@ -103,134 +39,197 @@
             </a>
         </nav>
     </div>
+
+    <div class="search-bar" id="searchBar">
+        <div class="search-bar-inner">
+            <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search for products..."
+                    autocomplete="off"
+            />
+            <div class="search-bar-divider"></div>
+            <button class="search-close" id="searchClose">Close</button>
+        </div>
+    </div>
 </header>
 
-<!-- Checkout -->
+<script>
+    const searchBtn   = document.getElementById('searchBtn');
+    const searchBar   = document.getElementById('searchBar');
+    const searchInput = document.getElementById('searchInput');
+    const searchClose = document.getElementById('searchClose');
+
+    // Open search bar
+    searchBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        searchBar.classList.add('open');
+        searchBtn.classList.add('search-active');
+        setTimeout(() => searchInput.focus(), 350); // focus after slide finishes
+    });
+
+    // Close via close button
+    searchClose.addEventListener('click', () => {
+        searchBar.classList.remove('open');
+        searchBtn.classList.remove('search-active');
+        searchInput.value = '';
+    });
+
+    // Close via Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            searchBar.classList.remove('open');
+            searchBtn.classList.remove('search-active');
+            searchInput.value = '';
+        }
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!searchBar.contains(e.target) && !searchBtn.contains(e.target)) {
+            searchBar.classList.remove('open');
+            searchBtn.classList.remove('search-active');
+        }
+    });
+</script>
+
+<!-- ═══════════════════════════════════════
+     CHECKOUT
+════════════════════════════════════════ -->
 <div class="checkout-container">
+
+    <!-- Back + title -->
     <div class="row mb-5">
         <div class="col-12">
-            <a href="cart.html" class="btn btn-outline-dark btn-lg mb-4 d-inline-flex align-items-center">
-                <i class="bi bi-arrow-left me-2"></i> Späť do košíka
+            <a href="cart.html" class="checkout-back d-inline-flex align-items-center mb-4">
+                ← Back to Cart
             </a>
-            <h1 class="text-center fw-bold fs-1 text-dark mb-4">Checkout info</h1>
+            <h1 class="checkout-title text-center">Checkout</h1>
         </div>
     </div>
 
     <div class="row g-5">
-        <!-- Formular -->
+
+        <!-- ── Form ── -->
         <div class="col-lg-8">
-            <div class="bg-light p-5 rounded-4" style="min-height: 600px;">
-                <h2 class="fw-bold fs-2 mb-5 pb-3 border-bottom">Kontaktné informácie</h2>
-                
+            <div class="checkout-form-box">
+
+                <h2 class="form-section-title">Contact Information</h2>
+
                 <form id="checkoutForm">
                     <div class="row g-4">
                         <div class="col-md-6">
-                            <label class="form-label fw-bold fs-5 mb-3 required">Meno</label>
-                            <input type="text" class="form-control form-control-lg" id="firstName" placeholder="Jan" required>
+                            <label class="checkout-label required" for="firstName">First Name</label>
+                            <input type="text" class="checkout-input form-control" id="firstName" placeholder="John" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-bold fs-5 mb-3 required">Priezvisko</label>
-                            <input type="text" class="form-control form-control-lg" id="lastName" placeholder="Novy" required>
+                            <label class="checkout-label required" for="lastName">Last Name</label>
+                            <input type="text" class="checkout-input form-control" id="lastName" placeholder="Smith" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-bold fs-5 mb-3 required">Email</label>
-                            <input type="email" class="form-control form-control-lg" id="email" placeholder="jan.novy@gmail.com" required>
+                            <label class="checkout-label required" for="email">Email</label>
+                            <input type="email" class="checkout-input form-control" id="email" placeholder="john.smith@gmail.com" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-bold fs-5 mb-3 required">Telefón</label>
-                            <input type="tel" class="form-control form-control-lg" id="phone" placeholder="0949 188 321" required>
+                            <label class="checkout-label required" for="phone">Phone</label>
+                            <input type="tel" class="checkout-input form-control" id="phone" placeholder="+1 234 567 890" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-bold fs-5 mb-3 required">Štát</label>
-                            <input type="text" class="form-control form-control-lg" id="state" placeholder="Slovensko" placeholder="Slovensko" required>
+                            <label class="checkout-label required" for="state">Country</label>
+                            <input type="text" class="checkout-input form-control" id="state" placeholder="United States" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-bold fs-5 mb-3 required">Ulica</label>
-                            <input type="text" class="form-control form-control-lg" id="street" placeholder="Mytna" required>
+                            <label class="checkout-label required" for="street">Street</label>
+                            <input type="text" class="checkout-input form-control" id="street" placeholder="Main Street" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-bold fs-5 mb-3 required">Číslo domu</label>
-                            <input type="text" class="form-control form-control-lg" id="streetNumber" placeholder="21" required>
+                            <label class="checkout-label required" for="streetNumber">House Number</label>
+                            <input type="text" class="checkout-input form-control" id="streetNumber" placeholder="21" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-bold fs-5 mb-3 required">PSČ</label>
-                            <input type="text" class="form-control form-control-lg" id="zip" placeholder="082 21" required>
+                            <label class="checkout-label required" for="zip">ZIP / Postal Code</label>
+                            <input type="text" class="checkout-input form-control" id="zip" placeholder="10001" required>
                         </div>
                     </div>
                 </form>
-                <!-- Platobne metody-->
-                <div class="mt-5 pt-4 border-top">
-                    <h5 class="fw-bold fs-4 mb-4">Spôsob platby</h5>
+
+                <!-- Payment methods -->
+                <div class="payment-section">
+                    <h2 class="form-section-title">Payment Method</h2>
                     <div class="row g-3">
                         <div class="col-6">
-                            <div class="form-check payment-option-form active" data-payment="cash">
-                                <input class="form-check-input d-none" type="radio" name="payment" value="cash" checked id="cash">
-                                <label class="form-check-label w-100 p-3 rounded-3 bg-light border" for="cash">
-                                    <div class="d-flex align-items-center">
-                                        <i class="bi bi-cash-stack fs-4 me-3 text-success"></i>
-                                        <div>
-                                            <strong>Dobierka</strong><br>
-                                            <small class="text-muted">Platba pri doručení</small>
-                                        </div>
+                            <div class="payment-option active" data-payment="cash">
+                                <input class="d-none" type="radio" name="payment" value="cash" checked id="cash">
+                                <label for="cash" class="payment-label">
+                                    <span class="payment-icon">💵</span>
+                                    <div>
+                                        <strong>Cash on Delivery</strong>
+                                        <small>Pay upon arrival</small>
                                     </div>
                                 </label>
                             </div>
                         </div>
                         <div class="col-6">
-                            <div class="form-check payment-option-form" data-payment="card">
-                                <input class="form-check-input d-none" type="radio" name="payment" value="card" id="card">
-                                <label class="form-check-label w-100 p-3 rounded-3 bg-light border" for="card">
-                                    <div class="d-flex align-items-center">
-                                        <i class="bi bi-credit-card fs-4 me-3 text-primary"></i>
-                                        <div>
-                                            <strong>Karta</strong><br>
-                                            <small class="text-muted">Online platba kartou</small>
-                                        </div>
+                            <div class="payment-option" data-payment="card">
+                                <input class="d-none" type="radio" name="payment" value="card" id="card">
+                                <label for="card" class="payment-label">
+                                    <span class="payment-icon">💳</span>
+                                    <div>
+                                        <strong>Credit Card</strong>
+                                        <small>Secure online payment</small>
                                     </div>
                                 </label>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
 
-        <!-- Sumar-->
+        <!-- ── Order summary ── -->
         <div class="col-lg-4">
             <div class="checkout-summary">
-                <h3 class="text-center mb-4 fw-bold fs-2">Súhrn objednávky</h3>
-                
-                <div class="summary-row d-flex justify-content-between align-items-center mb-4 p-3">
-                    <span class="fs-6">Produkty</span>
-                    <strong class="fs-6">€137.49</strong>
+
+                <h3 class="summary-title">Order Summary</h3>
+
+                <div class="summary-row d-flex justify-content-between align-items-center">
+                    <span>Products</span>
+                    <strong>€137.49</strong>
                 </div>
 
-                <div class="summary-row d-flex justify-content-between align-items-center mb-4 p-3">
-                    <span class="fs-6">Štandardná doprava</span>
-                    <strong class="fs-6">€4</strong>
-                </div>
-                
-                <div class="summary-row d-flex justify-content-between align-items-center p-3 mb-4 border-top">
-                    <h4 class="mb-0 fw-bold fs-4">Celkom</h4>
-                    <h2 class="mb-0 fw-bold fs-2">€141.49</h2>
+                <div class="summary-row d-flex justify-content-between align-items-center">
+                    <span>Standard Shipping</span>
+                    <strong>€4.00</strong>
                 </div>
 
-                <button class="btn order-btn w-100 fw-bold fs-6 d-flex align-items-center justify-content-center">
-                    <i class="bi bi-check-circle me-2"></i>
-                    Potvrdiť objednávku
+                <div class="summary-total d-flex justify-content-between align-items-center">
+                    <h4>Total</h4>
+                    <h2>€141.49</h2>
+                </div>
+
+                <button class="btn-order w-100 d-flex align-items-center justify-content-center">
+                    Confirm Order
                 </button>
+
             </div>
         </div>
 
+    </div>
+</div>
 
-<!-- Footer -->
+<!-- ═══════════════════════════════════════
+     FOOTER
+════════════════════════════════════════ -->
 <footer class="site-footer">
     <div class="footer-inner">
+
         <div class="footer-brand">
-            <a class="logo" href="index.html">
+            <a class="footer-logo" href="index.html">
                 <img src="/assets/logo.png" alt="Liorenne" class="logo-img" />
             </a>
         </div>
+
         <div class="footer-cols">
             <div class="footer-col">
                 <h4 class="footer-heading">SERVICES</h4>
@@ -257,8 +256,20 @@
                 </ul>
             </div>
         </div>
+
     </div>
 </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.querySelectorAll('.payment-option').forEach(option => {
+        option.addEventListener('click', () => {
+            document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('active'));
+            option.classList.add('active');
+            option.querySelector('input[type="radio"]').checked = true;
+        });
+    });
+</script>
 
 </body>
 </html>
