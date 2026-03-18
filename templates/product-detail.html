@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Pearson Car Coat - Liorenne</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Bodoni:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/styles/css/variables.css" />
+    <link rel="stylesheet" href="/styles/css/base.css" />
+    <link rel="stylesheet" href="/styles/css/components.css" />
+    <link rel="stylesheet" href="/styles/css/layout.css" />
+    <link rel="stylesheet" href="/styles/css/search.css" />
+    <link rel="stylesheet" href="/styles/css/wishlist.css" />
+    <link rel="stylesheet" href="/styles/css/product-detail.css" />
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+    <div class="header-inner">
+        <a class="logo" href="index.html">
+            <img src="/assets/logo.png" alt="Liorenne" class="logo-img" />
+        </a>
+        <nav class="icon-nav">
+            <a href="#" class="icon-link" aria-label="Search" id="searchBtn">
+                <img src="/assets/icons/search_logo.png" alt="Search" />
+            </a>
+            <a href="wishlist.html" class="icon-link" aria-label="Wishlist">
+                <img src="/assets/icons/heart_logo.png" alt="Wishlist" />
+            </a>
+            <a href="cart.html" class="icon-link" aria-label="Cart">
+                <img src="/assets/icons/cart_logo.png" alt="Cart" />
+            </a>
+            <a href="/account" class="icon-link" aria-label="Account">
+                <img src="/assets/icons/person_logo.png" alt="Account" />
+            </a>
+        </nav>
+    </div>
+
+    <div class="search-bar" id="searchBar">
+        <div class="search-bar-inner">
+            <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search for products..."
+                    autocomplete="off"
+            />
+            <div class="search-bar-divider"></div>
+            <button class="search-close" id="searchClose">Close</button>
+        </div>
+    </div>
+</header>
+
+<script>
+    const searchBtn   = document.getElementById('searchBtn');
+    const searchBar   = document.getElementById('searchBar');
+    const searchInput = document.getElementById('searchInput');
+    const searchClose = document.getElementById('searchClose');
+
+    // Open search bar
+    searchBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        searchBar.classList.add('open');
+        searchBtn.classList.add('search-active');
+        setTimeout(() => searchInput.focus(), 350); // focus after slide finishes
+    });
+
+    // Close via close button
+    searchClose.addEventListener('click', () => {
+        searchBar.classList.remove('open');
+        searchBtn.classList.remove('search-active');
+        searchInput.value = '';
+    });
+
+    // Close via Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            searchBar.classList.remove('open');
+            searchBtn.classList.remove('search-active');
+            searchInput.value = '';
+        }
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!searchBar.contains(e.target) && !searchBtn.contains(e.target)) {
+            searchBar.classList.remove('open');
+            searchBtn.classList.remove('search-active');
+        }
+    });
+</script>
+
+<!-- PRODUCT HERO -->
+<section class="product-hero py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <!-- GALÉRIA -->
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <div class="product-gallery">
+                    <img src="https://via.placeholder.com/500x600/1e3a8a/ffffff?text=COAT" 
+                         class="img-fluid rounded-4 shadow-lg main-img mb-4" alt="Pearson Car Coat">
+                    
+                    <!-- THUMBNAILS -->
+                    <div class="d-flex gap-2 justify-content-center">
+                        <img src="https://via.placeholder.com/80x80/1e3a8a/ffffff?text=1" 
+                             class="thumb rounded-2 shadow-sm active" alt="View 1">
+                        <img src="https://via.placeholder.com/80x80/8b4513/ffffff?text=2" 
+                             class="thumb rounded-2 shadow-sm" alt="View 2">
+                        <img src="https://via.placeholder.com/80x80/000000/ffffff?text=3" 
+                             class="thumb rounded-2 shadow-sm" alt="View 3">
+                        <img src="https://via.placeholder.com/80x80/ffffff/1e3a8a?text=4&text=4" 
+                             class="thumb rounded-2 shadow-sm" alt="View 4">
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRODUCT INFO -->
+            <div class="col-lg-6 ps-lg-5">
+                <div class="sticky-top" style="top: 100px;">
+                    <nav aria-label="breadcrumb" class="mb-4">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item"><a href="men.html">Men</a></li>
+                            <li class="breadcrumb-item active">Polo Shirt</li>
+                        </ol>
+                    </nav>
+
+                    <h1 class="display-4 fw-bold mb-3">Polo Shirt</h1>
+                    <div class="d-flex align-items-center mb-4">
+                        <span class="h3 fw-bold text-dark me-3">150€</span>
+                        <span class="text-muted text-decoration-line-through">250€</span>
+                        <span class="badge bg-success ms-2">21% OFF</span>
+                    </div>
+
+                    <!-- FARBY -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold fs-5 mb-2">Color:</label>
+                        <div class="d-flex gap-2">
+                            <div class="color-badge active" data-color="#1e3a8a" style="background: #1e3a8a;"></div>
+                            <div class="color-badge" data-color="#8b4513" style="background: #8b4513;"></div>
+                            <div class="color-badge" data-color="#000000" style="background: #000;"></div>
+                            <div class="color-badge" data-color="#ffffff" style="background: #fff; border: 3px solid #e5e7eb;"></div>
+                        </div>
+                    </div>
+
+                    <!-- VEĽKOSTI -->
+                    <div class="mb-5">
+                        <label class="form-label fw-bold fs-5 mb-2">Size:</label>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <div class="size-badge fw-bold">XS</div>
+                            <div class="size-badge fw-bold active">S</div>
+                            <div class="size-badge fw-bold">M</div>
+                            <div class="size-badge fw-bold">L</div>
+                            <div class="size-badge fw-bold">XL</div>
+                        </div>
+                        <small class="text-muted mt-2 d-block">You can't choose? <a href="#" class="text-decoration-none">Size guide</a></small>
+                    </div>
+
+                    <!-- PRIDAŤ DO KOŠÍKA -->
+                    <div class="d-grid gap-3">
+                        <button class="add-to-cart-btn shadow-lg">
+                             <a href="cart.html">
+                                <i class="bi bi-bag me-2"></i>Add to bag
+                            </a>
+                        </button>
+                        <div class="d-flex gap-3">
+                            <a href="wishlist.html">
+                                <button class="btn btn-outline-dark flex-fill rounded-pill">
+                                    <i class="bi bi-heart me-2"></i>Wishlist
+                                </a>
+                            </button>
+                            <button class="btn btn-outline-secondary rounded-circle p-3">
+                                <i class="bi bi-share"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- DOSTUPNOSŤ -->
+                    <div class="mt-4 p-3 bg-light rounded-3">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-check-circle-fill text-success me-2"></i>
+                            <span class="fw-bold">In stock</span>
+                            <span class="text-muted ms-2">Delivered to 2-3 days</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <a class="logo" href="index.html">
+                <img src="/assets/logo.png" alt="Liorenne" class="logo-img" />
+            </a>
+        </div>
+        <div class="footer-cols">
+            <div class="footer-col">
+                <h4 class="footer-heading">SERVICES</h4>
+                <ul class="footer-links">
+                    <li><a href="/shipping">Shipping</a></li>
+                    <li><a href="/returns">Returns</a></li>
+                    <li><a href="/promotions">Promotions</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-heading">CONTACT</h4>
+                <ul class="footer-links">
+                    <li><a href="/chat">Chat with us</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                    <li><a href="/store-locator">Store Locator</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-heading">OUR COMPANY</h4>
+                <ul class="footer-links">
+                    <li><a href="/careers">Careers</a></li>
+                    <li><a href="/investors">Investors</a></li>
+                    <li><a href="/press">Press</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+body { 
+    font-family: 'Libre Bodoni', serif; 
+}
+
+.product-hero { 
+    min-height: 80vh; 
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); 
+}
+
+.product-gallery img.main-img { 
+    height: 600px; 
+    object-fit: cover; 
+}
+
+.product-gallery img.thumb { 
+    height: 80px; 
+    width: 80px; 
+    object-fit: cover; 
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.product-gallery .thumb:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.product-gallery .thumb.active { 
+    border: 3px solid #3b82f6; 
+    border-radius: 8px;
+    transform: scale(1.05);
+}
+
+.size-badge { 
+    width: 48px; 
+    height: 48px; 
+    border-radius: 50%; 
+    border: 2px solid #e5e7eb; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    cursor: pointer; 
+    transition: all 0.3s ease;
+}
+
+.size-badge.active, 
+.size-badge:hover { 
+    border-color: rgba(46, 63, 93, 0.25); 
+    background: rgba(46, 63, 93); 
+    color: white; 
+}
+
+.color-badge { 
+    width: 36px; 
+    height: 36px; 
+    border-radius: 50%; 
+    border: 3px solid #e5e7eb; 
+    cursor: pointer; 
+    transition: all 0.3s ease;
+}
+
+.color-badge.active { 
+    border-color: rgba(46, 63, 93, 0.25); 
+    transform: scale(1.2); 
+}
+
+.add-to-cart-btn {
+    background: rgba(46, 63, 93);
+    border: none; 
+    color: white; 
+    padding: 1rem 2rem;
+    font-weight: 700; 
+    border-radius: 50px; 
+    font-size: 1.1rem;
+}
+
+.add-to-cart-btn:hover { 
+    transform: translateY(-2px); 
+    box-shadow: 0 10px 30px rgba(59,130,246,0.4); 
+}
+
+.product-hero .row > div {
+    position: relative;
+    z-index: 5;
+}

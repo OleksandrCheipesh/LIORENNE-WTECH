@@ -1,0 +1,62 @@
+body { 
+    font-family: 'Libre Bodoni', serif; 
+}
+
+.hero-section { 
+    background: linear-gradient(135deg, var(--color-navy) 0%, #3b82f6 50%, #1d4ed8 100%); 
+}
+
+.product-card {
+    background: #f8f9fa;
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.product-img {
+    height: 280px;
+    object-fit: cover;
+    background: #e9ecef;
+}
+
+.filter-section {
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    position: relative;    
+    z-index: 10 !important; 
+}
+
+.filter-group label { 
+    font-weight: 500; 
+    cursor: pointer; 
+}
+
+.badge-color { 
+    width: 24px; 
+    height: 24px; 
+    border-radius: 50%; 
+    display: inline-block; 
+    margin-right: 0.5rem; 
+}
+
+/* Filter interakcia */
+.cursor-pointer {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cursor-pointer.active,
+.cursor-pointer:hover {
+    background-color: #3b82f6 !important;
+    color: white !important;
+}
