@@ -19,10 +19,11 @@ Route::get('/accessories', [ProductController::class, 'index'])->defaults('categ
 Route::get('/gifts',       [ProductController::class, 'index'])->defaults('category', 'gifts')->name('gifts');
 
 // Shop pages
-Route::get('/cart',           fn() => view('cart'))->name('cart');
-Route::get('/wishlist',       fn() => view('wishlist'))->name('wishlist');
-Route::get('/checkout',       fn() => view('checkout'))->name('checkout');
-Route::get('/product-detail', fn() => view('product-detail'))->name('product-detail');
+Route::get('/cart', [CartController::class, 'index'])->name('cart');
+Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
+Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
+Route::post('/checkout', [CheckoutController::class, 'submit'])->name('checkout.submit');
 
 // Admin
 Route::get('/admin/login',              fn() => view('admin.login'))->name('admin.login');

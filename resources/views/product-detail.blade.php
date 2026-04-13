@@ -75,9 +75,12 @@
 
                 <!-- Actions -->
                 <div class="product-actions">
-                    <a href="{{ url('/cart') }}" class="add-to-cart-btn">
-                        <i class="bi bi-bag"></i> Add to Bag
-                    </a>
+                    <form action="{{ route('cart.add', 1) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="add-to-cart-btn">
+                            <i class="bi bi-bag"></i> Add to Bag
+                        </button>
+                    </form>
                     <div class="secondary-actions">
                         <a href="{{ url('/wishlist') }}" class="btn-wishlist">
                             <i class="bi bi-heart"></i> Wishlist
