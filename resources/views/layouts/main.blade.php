@@ -42,11 +42,13 @@
     </div>
 
     <div class="search-bar" id="searchBar">
-        <div class="search-bar-inner">
-            <input type="text" id="searchInput" placeholder="Search for products..." autocomplete="off" />
+        <form class="search-bar-inner" action="{{ route('search') }}" method="GET">
+            <input type="text" id="searchInput" name="q" placeholder="Search for products..."
+                autocomplete="off" value="{{ request('q') }}" />
             <div class="search-bar-divider"></div>
-            <button class="search-close" id="searchClose">Close</button>
-        </div>
+            <button type="submit" class="search-close">Search</button>
+            <button type="button" class="search-close" id="searchClose">Close</button>
+        </form>
     </div>
 </header>
 
