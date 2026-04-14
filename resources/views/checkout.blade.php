@@ -27,12 +27,6 @@
         </div>
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success mb-4">
-            {{ session('success') }}
-        </div>
-    @endif
-
     @if(session('error'))
         <div class="alert alert-danger mb-4">
             {{ session('error') }}
@@ -190,7 +184,6 @@
                         </div>
                     </div>
 
-                    <!-- Payment methods -->
                     <div class="payment-section mt-5">
                         <h2 class="form-section-title">Payment Method</h2>
 
@@ -240,49 +233,49 @@
                             <div class="text-danger mt-2">{{ $message }}</div>
                         @enderror
                     </div>
-
-                    <!-- Order summary -->
-                    <div class="checkout-summary mt-5">
-                        <h3 class="summary-title">Order Summary</h3>
-
-                        <div class="summary-row d-flex justify-content-between align-items-center">
-                            <span>Products</span>
-                            <strong>€{{ number_format($subtotal ?? 137.49, 2) }}</strong>
-                        </div>
-
-                        <div class="summary-row d-flex justify-content-between align-items-center">
-                            <span>Standard Shipping</span>
-                            <strong>€{{ number_format($shipping ?? 4.00, 2) }}</strong>
-                        </div>
-
-                        <div class="summary-total d-flex justify-content-between align-items-center">
-                            <h4>Total</h4>
-                            <h2>€{{ number_format($total ?? 141.49, 2) }}</h2>
-                        </div>
-
-                        <button type="submit" class="btn-order w-100 d-flex align-items-center justify-content-center">
-                            Confirm Order
-                        </button>
-                    </div>
                 </form>
             </div>
         </div>
 
-        <!-- Optional cart preview -->
+        <!-- Order Summary -->
         <div class="col-lg-4">
-            <div class="checkout-summary">
-                <h3 class="summary-title">Items in Cart</h3>
+            <div class="checkout-summary sticky-top" style="top: 2rem;">
+                <h3 class="summary-title">Order Summary</h3>
 
                 @if(!empty($cart))
                     @foreach($cart as $item)
-                        <div class="summary-row d-flex justify-content-between align-items-center">
-                            <span>{{ $item['name'] }} × {{ $item['quantity'] }}</span>
+                        <div class="summary-row d-flex justify-content-between align-items-start">
+                            <div>
+                                <span>{{ $item['name'] }}</span><br>
+                                <small class="text-muted">Qty: {{ $item['quantity'] }}</small>
+                            </div>
                             <strong>€{{ number_format($item['price'] * $item['quantity'], 2) }}</strong>
                         </div>
                     @endforeach
                 @else
-                    <p class="text-muted mb-0">Your cart is empty.</p>
+                    <p class="text-muted mb-3">Your cart is empty.</p>
                 @endif
+
+                <hr class="my-3">
+
+                <div class="summary-row d-flex justify-content-between align-items-center">
+                    <span>Subtotal</span>
+                    <strong>€{{ number_format($subtotal, 2) }}</strong>
+                </div>
+
+                <div class="summary-row d-flex justify-content-between align-items-center">
+                    <span>Shipping</span>
+                    <strong>€{{ number_format($shipping, 2) }}</strong>
+                </div>
+
+                <div class="summary-total d-flex justify-content-between align-items-center mt-3">
+                    <h4>Total</h4>
+                    <h2>€{{ number_format($total, 2) }}</h2>
+                </div>
+
+                <button type="submit" form="checkoutForm" class="btn-order w-100 d-flex align-items-center justify-content-center mt-4" {{ empty($cart) ? 'disabled' : '' }}>
+                    Confirm Order
+                </button>
             </div>
         </div>
 

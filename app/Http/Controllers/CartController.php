@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -9,42 +10,31 @@ class CartController extends Controller
     public function index()
     {
         $cart = session()->get('cart', []);
+
         return view('cart', compact('cart'));
     }
 
     public function add($id)
     {
-        $products = [
-            1 => [
-                'id' => 1,
-                'name' => 'Polo Shirt',
-                'price' => 89,
-                'image' => 'assets/polo.png',
-            ],
-        ];
+        $product = Product::findOrFail($id);
 
-        if (!isset($products[$id])) {
-            abort(404);
-        }
-
-        $product = $products[$id];
         $cart = session()->get('cart', []);
 
         if (isset($cart[$id])) {
             $cart[$id]['quantity']++;
         } else {
             $cart[$id] = [
-                'id' => $product['id'],
-                'name' => $product['name'],
-                'price' => $product['price'],
-                'image' => $product['image'],
+                'id' => $product->id,
+                'name' => $product->name,
+                'price' => $product->price,
+                'image' => $product->image,
                 'quantity' => 1,
             ];
         }
 
         session()->put('cart', $cart);
 
-        return redirect()->back()->with('success', 'Produkt bol pridaný do košíka.');
+        return redirect()->route('cart')->with('success', 'Produkt bol pridaný do košíka.');
     }
 
     public function remove($id)

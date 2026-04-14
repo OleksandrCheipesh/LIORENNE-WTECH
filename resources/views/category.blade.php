@@ -93,7 +93,7 @@
                 <div class="product-grid">
                     @forelse ($products as $product)
                         <div class="product-card">
-                            <a href="{{ url('/product-detail') }}" class="product-card-inner">
+                            <a href="{{ route('product.detail', $product->id) }}" class="product-card-inner">
                                 <div class="product-card-img-wrap">
                                     @if ($product->image)
                                         <img src="{{ asset('assets/' . $product->image) }}" alt="{{ $product->name }}">

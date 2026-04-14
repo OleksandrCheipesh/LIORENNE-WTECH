@@ -30,7 +30,7 @@
             <a href="#" class="icon-link" aria-label="Search" id="searchBtn">
                 <img src="{{ asset('assets/icons/search_logo.png') }}" alt="Search" />
             </a>
-            <a href="{{ route('wishlist') }}" class="icon-link" aria-label="Wishlist">
+            <a href="{{ route('wishlist.index') }}" class="icon-link" aria-label="Wishlist">
                 <img src="{{ asset('assets/icons/heart_logo.png') }}" alt="Wishlist" />
             </a>
             <a href="{{ route('cart') }}" class="icon-link" aria-label="Cart">

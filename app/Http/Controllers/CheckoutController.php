@@ -8,6 +8,20 @@ use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
+    public function index()
+    {
+        $cart = session()->get('cart', []);
+
+        $subtotal = collect($cart)->sum(function ($item) {
+            return $item['price'] * $item['quantity'];
+        });
+
+        $shipping = $subtotal > 0 ? 4.00 : 0.00;
+        $total = $subtotal + $shipping;
+
+        return view('checkout', compact('cart', 'subtotal', 'shipping', 'total'));
+    }
+
     public function submit(Request $request)
     {
         $validated = $request->validate([
@@ -22,7 +36,26 @@ class CheckoutController extends Controller
             'payment_method' => ['required', 'in:cash,card'],
         ]);
 
-        Mail::to('tvojmail@example.com')->send(new CheckoutOrderMail($validated));
+        $cart = session()->get('cart', []);
+
+        $subtotal = collect($cart)->sum(function ($item) {
+            return $item['price'] * $item['quantity'];
+        });
+
+        $shipping = $subtotal > 0 ? 4.00 : 0.00;
+        $total = $subtotal + $shipping;
+
+        $orderData = [
+            ...$validated,
+            'cart' => $cart,
+            'subtotal' => $subtotal,
+            'shipping' => $shipping,
+            'total' => $total,
+        ];
+
+        Mail::to('tvojmail@example.com')->send(new CheckoutOrderMail($orderData));
+
+        session()->forget('cart');
 
         return redirect()->back()->with('success', 'Order was successfully submitted.');
     }

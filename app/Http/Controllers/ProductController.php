@@ -9,7 +9,7 @@ class ProductController extends Controller
 {
     public function index(Request $request, string $category)
     {
-        $categoryMap = [
+        $categoryTitles = [
             'men'         => 'Men',
             'women'       => 'Women',
             'kids-baby'   => 'Kids & Baby',
@@ -18,31 +18,33 @@ class ProductController extends Controller
             'gifts'       => 'Gifts',
         ];
 
-        $categoryName = $categoryMap[$category] ?? null;
+        if (!array_key_exists($category, $categoryTitles)) {
+            abort(404);
+        }
 
-        $query = Product::where('category', $categoryName);
+        $categoryName = $categoryTitles[$category];
 
-        // Filter: price range
+        $query = Product::query()->where('category', $category);
+
         if ($request->filled('price_min')) {
             $query->where('price', '>=', $request->price_min);
         }
+
         if ($request->filled('price_max')) {
             $query->where('price', '<=', $request->price_max);
         }
 
-        // Filter: brand
         if ($request->filled('brand')) {
             $query->where('brand', $request->brand);
         }
 
-        // Filter: color
         if ($request->filled('color')) {
             $query->where('color', $request->color);
         }
 
-        // Sorting
         $sort = $request->get('sort', 'newest');
-        match($sort) {
+
+        match ($sort) {
             'price_asc'  => $query->orderBy('price', 'asc'),
             'price_desc' => $query->orderBy('price', 'desc'),
             default      => $query->latest(),
@@ -50,10 +52,27 @@ class ProductController extends Controller
 
         $products = $query->paginate(12)->withQueryString();
 
-        // Get unique brands and colors for filter dropdowns
-        $brands = Product::where('category', $categoryName)->distinct()->pluck('brand')->filter();
-        $colors = Product::where('category', $categoryName)->distinct()->pluck('color')->filter();
+        $brands = Product::where('category', $category)
+            ->whereNotNull('brand')
+            ->distinct()
+            ->pluck('brand')
+            ->filter()
+            ->values();
+
+        $colors = Product::where('category', $category)
+            ->whereNotNull('color')
+            ->distinct()
+            ->pluck('color')
+            ->filter()
+            ->values();
 
         return view('category', compact('products', 'brands', 'colors', 'category', 'categoryName'));
+    }
+
+    public function show($id)
+    {
+        $product = Product::findOrFail($id);
+
+        return view('product-detail', compact('product'));
     }
 }

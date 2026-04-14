@@ -1,134 +1,234 @@
 @extends('layouts.main')
 
-@section('title', 'Polo Shirt - Liorenne')
+@section('title', $product->name . ' - Liorenne')
 
 @section('extra-css')
 <link rel="stylesheet" href="{{ asset('styles/css/product-detail.css') }}" />
+<style>
+    .product-options {
+        margin-top: 24px;
+    }
+
+    .option-group {
+        margin-bottom: 24px;
+    }
+
+    .option-values {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .size-option input,
+    .color-option input {
+        display: none;
+    }
+
+    .size-badge,
+    .color-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 52px;
+        padding: 10px 16px;
+        border: 1px solid #d9d9d9;
+        border-radius: 999px;
+        background: #fff;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 14px;
+    }
+
+    .size-option input:checked + .size-badge,
+    .color-option input:checked + .color-badge {
+        background: #111;
+        color: #fff;
+        border-color: #111;
+    }
+
+    .color-badge {
+        min-width: 90px;
+    }
+
+    .product-label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+</style>
 @endsection
 
 @section('content')
-
-<!-- ═══════════════════════════════════════
-     PRODUCT DETAIL
-════════════════════════════════════════ -->
 <section class="product-hero">
     <div class="row g-5 align-items-start">
 
-        <!-- ── Gallery ── -->
         <div class="col-lg-6">
             <div class="product-gallery">
-                <img src="{{ asset('assets/polo.png') }}"
-                     class="main-img" alt="Polo Shirt" id="mainImg">
+                <img
+                    src="{{ $product->image ? asset($product->image) : asset('assets/polo.png') }}"
+                    class="main-img"
+                    alt="{{ $product->name }}"
+                    id="mainImg"
+                >
+
                 <div class="thumbs">
-                    <img src="{{ asset('assets/polo.png') }}" class="thumb active" alt="View 1" onclick="switchImg(this)">
-                    <img src="{{ asset('assets/polo.png') }}" class="thumb" alt="View 2" onclick="switchImg(this)">
-                    <img src="{{ asset('assets/polo.png') }}" class="thumb" alt="View 3" onclick="switchImg(this)">
-                    <img src="{{ asset('assets/polo.png') }}" class="thumb" alt="View 4" onclick="switchImg(this)">
+                    <img src="{{ $product->image ? asset($product->image) : asset('assets/polo.png') }}" class="thumb active" alt="View 1" onclick="switchImg(this)">
+                    <img src="{{ $product->image ? asset($product->image) : asset('assets/polo.png') }}" class="thumb" alt="View 2" onclick="switchImg(this)">
+                    <img src="{{ $product->image ? asset($product->image) : asset('assets/polo.png') }}" class="thumb" alt="View 3" onclick="switchImg(this)">
+                    <img src="{{ $product->image ? asset($product->image) : asset('assets/polo.png') }}" class="thumb" alt="View 4" onclick="switchImg(this)">
                 </div>
             </div>
         </div>
 
-        <!-- ── Product info ── -->
         <div class="col-lg-6">
             <div class="product-info">
 
-                <!-- Breadcrumb -->
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-                        <li class="breadcrumb-item"><a href="{{ url('/men') }}">Men</a></li>
-                        <li class="breadcrumb-item active">Polo Shirt</li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ url('/' . $product->category) }}">
+                                {{ ucfirst($product->category) }}
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active">{{ $product->name }}</li>
                     </ol>
                 </nav>
 
-                <!-- Name -->
-                <h1 class="product-name">Polo Shirt</h1>
+                <h1 class="product-name">{{ $product->name }}</h1>
 
-                <!-- Price -->
                 <div class="product-price-row">
-                    <span class="product-price">€150</span>
-                    <span class="product-price-original">€250</span>
-                    <span class="product-discount">21% OFF</span>
+                    <span class="product-price">€{{ number_format($product->price, 2) }}</span>
+
+                    @if($product->original_price)
+                        <span class="product-price-original">€{{ number_format($product->original_price, 2) }}</span>
+                    @endif
                 </div>
 
-                <!-- Colour -->
-                <label class="product-label">Colour</label>
-                <div class="color-options">
-                    <div class="color-badge active" data-color="#2E3F5D" style="background:#2E3F5D;"></div>
-                    <div class="color-badge" data-color="#8b4513" style="background:#8b4513;"></div>
-                    <div class="color-badge" data-color="#000000" style="background:#000;"></div>
-                    <div class="color-badge" data-color="#ffffff" style="background:#fff; border-color:#ccc;"></div>
+                <div class="product-options">
+
+                    @if($product->color)
+                        <div class="option-group">
+                            <label class="product-label">Colour</label>
+                            <div class="option-values">
+                                <label class="color-option">
+                                    <input type="radio" name="selected_color_preview" checked>
+                                    <span class="color-badge">{{ $product->color }}</span>
+                                </label>
+                            </div>
+                        </div>
+                    @endif
+
+                    @if(!empty($product->sizes) && is_array($product->sizes))
+                        <div class="option-group">
+                            <label class="product-label">Size</label>
+                            <div class="option-values">
+                                @foreach($product->sizes as $size)
+                                    <label class="size-option">
+                                        <input
+                                            type="radio"
+                                            name="selected_size_preview"
+                                            value="{{ $size }}"
+                                            {{ $loop->first ? 'checked' : '' }}
+                                        >
+                                        <span class="size-badge">{{ $size }}</span>
+                                    </label>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
                 </div>
 
-                <!-- Size -->
-                <label class="product-label" style="margin-top: 24px;">Size</label>
-                <div class="size-options">
-                    <div class="size-badge">XS</div>
-                    <div class="size-badge active">S</div>
-                    <div class="size-badge">M</div>
-                    <div class="size-badge">L</div>
-                    <div class="size-badge">XL</div>
-                </div>
-                <p style="margin-top: 10px; margin-bottom: 0;">
-                    <a href="#" class="size-guide-link">Size guide</a>
-                </p>
-
-                <!-- Actions -->
                 <div class="product-actions">
-                    <form action="{{ route('cart.add', 1) }}" method="POST">
+                    <form action="{{ route('cart.add', $product->id) }}" method="POST" id="addToCartForm">
                         @csrf
+
+                        @if($product->color)
+                            <input type="hidden" name="selected_color" value="{{ $product->color }}">
+                        @endif
+
+                        @if(!empty($product->sizes) && is_array($product->sizes))
+                            <input
+                                type="hidden"
+                                name="selected_size"
+                                id="selectedSizeInput"
+                                value="{{ $product->sizes[0] }}"
+                            >
+                        @endif
+
                         <button type="submit" class="add-to-cart-btn">
                             <i class="bi bi-bag"></i> Add to Bag
                         </button>
                     </form>
+
                     <div class="secondary-actions">
-                        <a href="{{ url('/wishlist') }}" class="btn-wishlist">
-                            <i class="bi bi-heart"></i> Wishlist
-                        </a>
-                        <button class="btn-share" aria-label="Share">
+                        <form action="{{ route('wishlist.add', $product->id) }}" method="POST">
+                            @csrf
+
+                            @if($product->color)
+                                <input type="hidden" name="selected_color" value="{{ $product->color }}">
+                            @endif
+
+                            @if(!empty($product->sizes) && is_array($product->sizes))
+                                <input
+                                    type="hidden"
+                                    name="selected_size"
+                                    id="selectedWishlistSizeInput"
+                                    value="{{ $product->sizes[0] }}"
+                                >
+                            @endif
+
+                            <button type="submit" class="btn-wishlist">
+                                <i class="bi bi-heart"></i> Wishlist
+                            </button>
+                        </form>
+                        <button class="btn-share" type="button" aria-label="Share">
                             <i class="bi bi-share"></i>
                         </button>
                     </div>
                 </div>
 
-                <!-- Stock -->
                 <div class="stock-info">
                     <span class="stock-dot"></span>
                     <span>In stock</span>
                     <small>· Delivered in 2–3 days</small>
                 </div>
 
+                @if($product->description)
+                    <div class="mt-4">
+                        <h5>Description</h5>
+                        <p>{{ $product->description }}</p>
+                    </div>
+                @endif
+
             </div>
         </div>
 
     </div>
 </section>
-
 @endsection
 
 @section('extra-js')
 <script>
-    // Thumbnail switcher
     function switchImg(thumb) {
         document.getElementById('mainImg').src = thumb.src;
         document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
         thumb.classList.add('active');
     }
 
-    // Size selector
-    document.querySelectorAll('.size-badge').forEach(badge => {
-        badge.addEventListener('click', () => {
-            document.querySelectorAll('.size-badge').forEach(b => b.classList.remove('active'));
-            badge.classList.add('active');
-        });
-    });
+    document.addEventListener('DOMContentLoaded', function () {
+        const sizeRadios = document.querySelectorAll('input[name="selected_size_preview"]');
+        const selectedSizeInput = document.getElementById('selectedSizeInput');
 
-    // Colour selector
-    document.querySelectorAll('.color-badge').forEach(badge => {
-        badge.addEventListener('click', () => {
-            document.querySelectorAll('.color-badge').forEach(b => b.classList.remove('active'));
-            badge.classList.add('active');
-        });
+        if (sizeRadios.length && selectedSizeInput) {
+            sizeRadios.forEach(radio => {
+                radio.addEventListener('change', function () {
+                    selectedSizeInput.value = this.value;
+                });
+            });
+        }
     });
 </script>
 @endsection
