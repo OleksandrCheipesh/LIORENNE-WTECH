@@ -5,6 +5,8 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WishlistController;
 
@@ -39,10 +41,16 @@ Route::post('/wishlist/add/{id}', [WishlistController::class, 'add'])->name('wis
 Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
 
 // Admin
-Route::get('/admin/login', fn() => view('admin.login'))->name('admin.login');
-Route::get('/admin/dashboard', fn() => view('admin.dashboard'))->name('admin.dashboard');
-Route::get('/admin/products/create', fn() => view('admin.product-new'))->name('admin.products.create');
-Route::get('/admin/products/{id}/edit', fn() => view('admin.product-edit'))->name('admin.products.edit');
+Route::get('/admin/login', [AdminController::class, 'showLogin'])->name('admin.login');
+Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.login.submit');
+Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
+
+Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminProductController::class, 'index'])->name('dashboard');
+    Route::get('/products/create', [AdminProductController::class, 'create'])->name('products.create');
+    Route::post('/products', [AdminProductController::class, 'store'])->name('products.store');
+    Route::get('/products/{id}/edit', fn() => view('admin.product-edit'))->name('products.edit');
+});
 
 Route::get('/dashboard', fn() => view('dashboard'))
     ->middleware(['auth', 'verified'])

@@ -88,22 +88,14 @@
     });
 </script>
 
-@if(session('success'))
-    <div class="container mt-4">
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+@if(session('success') || session('error'))
+    <div class="liorenne-toast {{ session('error') ? 'liorenne-toast--error' : '' }}" id="siteToast">
+        <span class="liorenne-toast__msg">{{ session('success') ?? session('error') }}</span>
+        <button class="liorenne-toast__close" onclick="this.parentElement.remove()" aria-label="Close">&#x2715;</button>
     </div>
-@endif
-
-@if(session('error'))
-    <div class="container mt-4">
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    </div>
+    <script>
+        setTimeout(() => { const t = document.getElementById('siteToast'); if (t) t.remove(); }, 4000);
+    </script>
 @endif
 
 @yield('content')
@@ -145,6 +137,9 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    window.__authUser = @auth {!! json_encode(['name' => auth()->user()->name, 'email' => auth()->user()->email]) !!} @else null @endauth;
+</script>
 <script src="{{ asset('js/auth-panel.js') }}"></script>
 @yield('extra-js')
 

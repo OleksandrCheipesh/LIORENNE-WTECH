@@ -67,12 +67,11 @@
                     </div>
                 @endforeach
             @else
-                <div class="cart-product text-center">
-                    <h3 class="fw-bold mb-3">Your cart is empty</h3>
-                    <p class="text-muted mb-4">You have no products in your cart yet.</p>
-                    <a href="{{ route('men') }}" class="btn btn-dark px-4 py-2">
-                        Continue shopping
-                    </a>
+                <div class="cart-empty">
+                    <p class="cart-empty__label">Your Bag</p>
+                    <h2 class="cart-empty__title">Your cart is empty</h2>
+                    <p class="cart-empty__sub">Add items to your bag to see them here.</p>
+                    <a href="{{ route('women') }}" class="btn-checkout cart-empty__cta">Start Shopping</a>
                 </div>
             @endif
         </div>

@@ -43,8 +43,11 @@
                     </div>
                 </div>
             @empty
-                <div class="alert alert-info">
-                    Your wishlist is empty.
+                <div class="wishlist-empty">
+                    <p class="wishlist-empty__label">Wishlist</p>
+                    <h2 class="wishlist-empty__title">Nothing saved yet</h2>
+                    <p class="wishlist-empty__sub">Browse our collections and save items you love.</p>
+                    <a href="{{ route('women') }}" class="btn-continue wishlist-empty__cta">Explore Collections</a>
                 </div>
             @endforelse
         </div>

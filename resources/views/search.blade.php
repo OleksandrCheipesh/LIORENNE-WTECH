@@ -26,12 +26,12 @@
         <div class="product-grid" style="margin-top: 40px;">
             @foreach ($products as $product)
                 <div class="product-card">
-                    <a href="{{ url('/product-detail') }}" class="product-card-inner">
+                    <a href="{{ route('product.detail', $product->id) }}" class="product-card-inner">
                         <div class="product-card-img-wrap">
                             @if ($product->image)
-                                <img src="{{ asset('assets/' . $product->image) }}" alt="{{ $product->name }}">
+                                <img src="{{ asset($product->image) }}" alt="{{ $product->name }}">
                             @else
-                                <img src="https://via.placeholder.com/400x533/f0f0f0/c0c0c0?text={{ urlencode($product->name) }}" alt="{{ $product->name }}">
+                                <img src="{{ asset('assets/polo.png') }}" alt="{{ $product->name }}">
                             @endif
                         </div>
                         <div class="product-card-info">

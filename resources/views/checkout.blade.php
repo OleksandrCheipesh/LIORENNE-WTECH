@@ -185,6 +185,56 @@
                     </div>
 
                     <div class="payment-section mt-5">
+                        <h2 class="form-section-title">Shipping Method</h2>
+
+                        <div class="row g-3 mb-2">
+                            <div class="col-12 col-md-4">
+                                <div class="payment-option {{ old('shipping_method', 'standard') === 'standard' ? 'active' : '' }}" data-payment="shipping_standard">
+                                    <input class="d-none" type="radio" name="shipping_method" value="standard" id="shipping_standard"
+                                        {{ old('shipping_method', 'standard') === 'standard' ? 'checked' : '' }}>
+                                    <label for="shipping_standard" class="payment-label">
+                                        <span class="payment-icon">📦</span>
+                                        <div>
+                                            <strong>Standard</strong>
+                                            <small>3–5 days · €4.00</small>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="payment-option {{ old('shipping_method') === 'express' ? 'active' : '' }}" data-payment="shipping_express">
+                                    <input class="d-none" type="radio" name="shipping_method" value="express" id="shipping_express"
+                                        {{ old('shipping_method') === 'express' ? 'checked' : '' }}>
+                                    <label for="shipping_express" class="payment-label">
+                                        <span class="payment-icon">⚡</span>
+                                        <div>
+                                            <strong>Express</strong>
+                                            <small>1–2 days · €9.00</small>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="payment-option {{ old('shipping_method') === 'pickup' ? 'active' : '' }}" data-payment="shipping_pickup">
+                                    <input class="d-none" type="radio" name="shipping_method" value="pickup" id="shipping_pickup"
+                                        {{ old('shipping_method') === 'pickup' ? 'checked' : '' }}>
+                                    <label for="shipping_pickup" class="payment-label">
+                                        <span class="payment-icon">🏪</span>
+                                        <div>
+                                            <strong>Store Pickup</strong>
+                                            <small>Free · Bratislava</small>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        @error('shipping_method')
+                            <div class="text-danger mt-2">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="payment-section mt-5">
                         <h2 class="form-section-title">Payment Method</h2>
 
                         <div class="row g-3">
@@ -239,7 +289,7 @@
 
         <!-- Order Summary -->
         <div class="col-lg-4">
-            <div class="checkout-summary sticky-top" style="top: 2rem;">
+            <div class="checkout-summary">
                 <h3 class="summary-title">Order Summary</h3>
 
                 @if(!empty($cart))
@@ -247,16 +297,16 @@
                         <div class="summary-row d-flex justify-content-between align-items-start">
                             <div>
                                 <span>{{ $item['name'] }}</span><br>
-                                <small class="text-muted">Qty: {{ $item['quantity'] }}</small>
+                                <small style="color:rgba(255,255,255,0.5);font-size:12px;">Qty: {{ $item['quantity'] }}</small>
                             </div>
                             <strong>€{{ number_format($item['price'] * $item['quantity'], 2) }}</strong>
                         </div>
                     @endforeach
                 @else
-                    <p class="text-muted mb-3">Your cart is empty.</p>
+                    <p style="color:rgba(255,255,255,0.6);font-size:13px;margin-bottom:1rem;">Your cart is empty.</p>
                 @endif
 
-                <hr class="my-3">
+                <hr style="border-color:rgba(255,255,255,0.15);margin:1.25rem 0;">
 
                 <div class="summary-row d-flex justify-content-between align-items-center">
                     <span>Subtotal</span>
@@ -287,13 +337,17 @@
 <script>
     document.querySelectorAll('.payment-option').forEach(option => {
         option.addEventListener('click', () => {
-            document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('active'));
-            option.classList.add('active');
-
             const radio = option.querySelector('input[type="radio"]');
-            if (radio) {
-                radio.checked = true;
-            }
+            if (!radio) return;
+
+            // Only deactivate siblings in the same radio group
+            const groupName = radio.name;
+            document.querySelectorAll(`input[name="${groupName}"]`).forEach(r => {
+                r.closest('.payment-option')?.classList.remove('active');
+            });
+
+            option.classList.add('active');
+            radio.checked = true;
         });
     });
 </script>

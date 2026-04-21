@@ -87,12 +87,6 @@
     }
 }
 
-.footer-brand {
-    grid-column: 1;
-    display: flex;
-    align-items: center;    /* ← vertical center if needed */
-    justify-content: center; /* ← horizontal center within the left 50% */
-}
 /* ─── RESPONSIVE: CATEGORY ──────────────── */
 .category-section {
     display: grid;

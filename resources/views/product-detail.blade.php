@@ -65,18 +65,25 @@
 
         <div class="col-lg-6">
             <div class="product-gallery">
+                @php
+                    $galleryImages = !empty($product->images) ? $product->images : ($product->image ? [$product->image] : []);
+                    $fallback = asset('assets/polo.png');
+                    $mainSrc = count($galleryImages) ? asset($galleryImages[0]) : $fallback;
+                @endphp
+
                 <img
-                    src="{{ $product->image ? asset($product->image) : asset('assets/polo.png') }}"
+                    src="{{ $mainSrc }}"
                     class="main-img"
                     alt="{{ $product->name }}"
                     id="mainImg"
                 >
 
                 <div class="thumbs">
-                    <img src="{{ $product->image ? asset($product->image) : asset('assets/polo.png') }}" class="thumb active" alt="View 1" onclick="switchImg(this)">
-                    <img src="{{ $product->image ? asset($product->image) : asset('assets/polo.png') }}" class="thumb" alt="View 2" onclick="switchImg(this)">
-                    <img src="{{ $product->image ? asset($product->image) : asset('assets/polo.png') }}" class="thumb" alt="View 3" onclick="switchImg(this)">
-                    <img src="{{ $product->image ? asset($product->image) : asset('assets/polo.png') }}" class="thumb" alt="View 4" onclick="switchImg(this)">
+                    @forelse ($galleryImages as $i => $img)
+                        <img src="{{ asset($img) }}" class="thumb {{ $i === 0 ? 'active' : '' }}" alt="View {{ $i + 1 }}" onclick="switchImg(this)">
+                    @empty
+                        <img src="{{ $fallback }}" class="thumb active" alt="{{ $product->name }}" onclick="switchImg(this)">
+                    @endforelse
                 </div>
             </div>
         </div>
@@ -108,14 +115,17 @@
 
                 <div class="product-options">
 
-                    @if($product->color)
+                    @php $colorList = !empty($product->colors) ? $product->colors : ($product->color ? [$product->color] : []); @endphp
+                    @if(count($colorList))
                         <div class="option-group">
                             <label class="product-label">Colour</label>
                             <div class="option-values">
+                                @foreach($colorList as $i => $c)
                                 <label class="color-option">
-                                    <input type="radio" name="selected_color_preview" checked>
-                                    <span class="color-badge">{{ $product->color }}</span>
+                                    <input type="radio" name="selected_color_preview" value="{{ $c }}" {{ $i === 0 ? 'checked' : '' }}>
+                                    <span class="color-badge">{{ $c }}</span>
                                 </label>
+                                @endforeach
                             </div>
                         </div>
                     @endif
@@ -145,8 +155,8 @@
                     <form action="{{ route('cart.add', $product->id) }}" method="POST" id="addToCartForm">
                         @csrf
 
-                        @if($product->color)
-                            <input type="hidden" name="selected_color" value="{{ $product->color }}">
+                        @if(count($colorList))
+                            <input type="hidden" name="selected_color" id="cartColorInput" value="{{ $colorList[0] }}">
                         @endif
 
                         @if(!empty($product->sizes) && is_array($product->sizes))
@@ -167,8 +177,8 @@
                         <form action="{{ route('wishlist.add', $product->id) }}" method="POST">
                             @csrf
 
-                            @if($product->color)
-                                <input type="hidden" name="selected_color" value="{{ $product->color }}">
+                            @if(count($colorList))
+                                <input type="hidden" name="selected_color" id="wishlistColorInput" value="{{ $colorList[0] }}">
                             @endif
 
                             @if(!empty($product->sizes) && is_array($product->sizes))
@@ -229,6 +239,17 @@
                 });
             });
         }
+
+        const colorRadios = document.querySelectorAll('input[name="selected_color_preview"]');
+        const cartColorInput     = document.getElementById('cartColorInput');
+        const wishlistColorInput = document.getElementById('wishlistColorInput');
+
+        colorRadios.forEach(radio => {
+            radio.addEventListener('change', function () {
+                if (cartColorInput)     cartColorInput.value     = this.value;
+                if (wishlistColorInput) wishlistColorInput.value = this.value;
+            });
+        });
     });
 </script>
 @endsection

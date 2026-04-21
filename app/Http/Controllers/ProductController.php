@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index(Request $request, string $category)
+    public function index(Request $request)
     {
+        $category = $request->route()->defaults['category'] ?? '';
+
         $categoryTitles = [
             'men'         => 'Men',
             'women'       => 'Women',
@@ -24,7 +26,7 @@ class ProductController extends Controller
 
         $categoryName = $categoryTitles[$category];
 
-        $query = Product::query()->where('category', $category);
+        $query = Product::query()->where('category', $categoryName);
 
         if ($request->filled('price_min')) {
             $query->where('price', '>=', $request->price_min);
@@ -52,14 +54,14 @@ class ProductController extends Controller
 
         $products = $query->paginate(12)->withQueryString();
 
-        $brands = Product::where('category', $category)
+        $brands = Product::where('category', $categoryName)
             ->whereNotNull('brand')
             ->distinct()
             ->pluck('brand')
             ->filter()
             ->values();
 
-        $colors = Product::where('category', $category)
+        $colors = Product::where('category', $categoryName)
             ->whereNotNull('color')
             ->distinct()
             ->pluck('color')

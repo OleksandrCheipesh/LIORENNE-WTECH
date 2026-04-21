@@ -13,13 +13,17 @@ class Product extends Model
         'original_price',
         'brand',
         'color',
+        'colors',
         'sizes',
         'stock',
         'category',
         'image',
+        'images',
     ];
 
     protected $casts = [
-        'sizes' => 'array',
+        'sizes'  => 'array',
+        'colors' => 'array',
+        'images' => 'array',
     ];
 }
