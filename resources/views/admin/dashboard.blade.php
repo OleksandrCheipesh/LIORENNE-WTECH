@@ -88,13 +88,13 @@
   @endif
 
 <!-- Delete confirm modal -->
-<div class="modal-overlay" id="deleteModal" style="display:none;">
+<div class="modal-overlay" id="deleteModal">
   <div class="modal">
     <h2 class="modal-title">Delete product?</h2>
-    <p class="modal-text">Are you sure you want to delete <strong id="deleteProductName"></strong>? This action cannot be undone.</p>
+    <p class="modal-text">Are you sure you want to delete this product? This action cannot be undone.</p>
     <div class="modal-actions">
-      <button class="btn-action" onclick="closeModal()">Cancel</button>
-      <form id="deleteForm" method="POST" style="display:inline;">
+      <button class="btn-action" onclick="document.getElementById('deleteModal').classList.remove('open')">Cancel</button>
+      <form id="deleteForm" method="POST" action="">
         @csrf
         @method('DELETE')
         <button type="submit" class="btn-action btn-delete">Delete</button>
@@ -108,12 +108,8 @@
 @section('extra-js')
 <script>
   function confirmDelete(id, name) {
-    document.getElementById('deleteProductName').textContent = name;
     document.getElementById('deleteForm').action = '/admin/products/' + id;
-    document.getElementById('deleteModal').style.display = 'flex';
-  }
-  function closeModal() {
-    document.getElementById('deleteModal').style.display = 'none';
+    document.getElementById('deleteModal').classList.add('open');
   }
 </script>
 @endsection
