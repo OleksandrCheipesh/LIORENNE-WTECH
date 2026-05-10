@@ -1,15 +1,31 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\Models\CartItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
     public function index()
     {
-        $cart = session()->get('cart', []);
+        if (Auth::check()) {
+            $cart = CartItem::with('product')
+                ->where('user_id', Auth::id())
+                ->get()
+                ->mapWithKeys(function ($item) {
+                    return [$item->product_id => [
+                        'id'       => $item->product_id,
+                        'name'     => $item->product->name,
+                        'price'    => $item->product->price,
+                        'image'    => $item->product->image,
+                        'quantity' => $item->quantity,
+                    ]];
+                })->toArray();
+        } else {
+            $cart = session()->get('cart', []);
+        }
 
         return view('cart', compact('cart'));
     }
@@ -18,30 +34,47 @@ class CartController extends Controller
     {
         $product = Product::findOrFail($id);
 
-        $cart = session()->get('cart', []);
+        if (Auth::check()) {
+            $item = CartItem::where('user_id', Auth::id())
+                ->where('product_id', $id)
+                ->first();
 
-        if (isset($cart[$id])) {
-            $cart[$id]['quantity']++;
+            if ($item) {
+                $item->increment('quantity');
+            } else {
+                CartItem::create([
+                    'user_id'    => Auth::id(),
+                    'product_id' => $id,
+                    'quantity'   => 1,
+                ]);
+            }
         } else {
-            $cart[$id] = [
-                'id' => $product->id,
-                'name' => $product->name,
-                'price' => $product->price,
-                'image' => $product->image,
-                'quantity' => 1,
-            ];
+            $cart = session()->get('cart', []);
+            if (isset($cart[$id])) {
+                $cart[$id]['quantity']++;
+            } else {
+                $cart[$id] = [
+                    'id'       => $product->id,
+                    'name'     => $product->name,
+                    'price'    => $product->price,
+                    'image'    => $product->image,
+                    'quantity' => 1,
+                ];
+            }
+            session()->put('cart', $cart);
         }
-
-        session()->put('cart', $cart);
 
         return redirect()->route('cart')->with('success', 'Produkt bol pridaný do košíka.');
     }
 
     public function remove($id)
     {
-        $cart = session()->get('cart', []);
-
-        if (isset($cart[$id])) {
+        if (Auth::check()) {
+            CartItem::where('user_id', Auth::id())
+                ->where('product_id', $id)
+                ->delete();
+        } else {
+            $cart = session()->get('cart', []);
             unset($cart[$id]);
             session()->put('cart', $cart);
         }
@@ -51,20 +84,20 @@ class CartController extends Controller
 
     public function update(Request $request, $id)
     {
-        $cart = session()->get('cart', []);
+        $quantity = max(1, (int) $request->quantity);
 
-        if (!isset($cart[$id])) {
-            return redirect()->route('cart')->with('error', 'Produkt sa v košíku nenašiel.');
+        if (Auth::check()) {
+            CartItem::where('user_id', Auth::id())
+                ->where('product_id', $id)
+                ->update(['quantity' => $quantity]);
+        } else {
+            $cart = session()->get('cart', []);
+            if (!isset($cart[$id])) {
+                return redirect()->route('cart')->with('error', 'Produkt sa v košíku nenašiel.');
+            }
+            $cart[$id]['quantity'] = $quantity;
+            session()->put('cart', $cart);
         }
-
-        $quantity = (int) $request->quantity;
-
-        if ($quantity < 1) {
-            $quantity = 1;
-        }
-
-        $cart[$id]['quantity'] = $quantity;
-        session()->put('cart', $cart);
 
         return redirect()->route('cart')->with('success', 'Množstvo produktu bolo upravené.');
     }
